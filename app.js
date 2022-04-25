@@ -99,26 +99,44 @@ function ballCordinate(){
 
 // ball trajectory
 function moveBall(){
-    checkForCollision()
     ballCurrentPosition[0] += xDirection
     ballCurrentPosition[1] += yDirection
-    console.log(ballCurrentPosition)
-    console.log(currentPosition)
     ballCordinate()
+    checkForCollision()
 }
 timerId = setInterval(moveBall, 30)
 
 // check for collision
 function checkForCollision(){
     // check for wall collision
-    if(ballCurrentPosition[1] >= (boardHeight - ballDiameter)){
-            yDirection -= 2
+    if(ballCurrentPosition[1] === (boardHeight - ballDiameter) ||ballCurrentPosition[0] === (boardWidth - ballDiameter) ||
+    ballCurrentPosition[1] === 40 || ballCurrentPosition[0] === 10){
+            ballDeflect()
     }
-    else if(ballCurrentPosition[0] >= (boardWidth - ballDiameter)){
-        xDirection -= 2
+    console.log(ballCurrentPosition)
+}
+
+function ballDeflect(){
+    if(xDirection === 2 && yDirection === 2){
+        yDirection = -2
+        return
     }
-    // else if(ballCurrentPosition[0] <= currentPosition[0]){
-    //     yDirection += 2 
-    // }
+    else if(xDirection === 2 && yDirection === -2){
+        xDirection = -2
+        return
+    }
+    else if(xDirection === -2 && yDirection === -2 && ballCurrentPosition[1] === 40){
+        yDirection = 2
+        return
+    }
+
+    else if(xDirection === -2 && yDirection === -2) {
+        xDirection = 2
+        return
+    }
+    else if(xDirection === -2 && yDirection === +2){
+        yDirection -2
+        return
+    }
 }
 
