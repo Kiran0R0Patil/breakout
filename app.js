@@ -1,15 +1,19 @@
 const grid = document.querySelector('.grid')
+const boardWidth = 560
+const boardHeight = 300
 const blockWidth = 100 
 const blockHeight = 20
-const boardWidth = 460
+const ballDiameter = 20
 let timerId
+let xDirection = 2
+let yDirection = 2
 
 const userStart = [230,10]
 let currentPosition = userStart
 const ballStart = [270,40]
 let ballCurrentPosition = ballStart
 
-// create block
+// create all target blocks
 class Block {
     constructor(x,y) {
         this.bottomLeft = [x,y]
@@ -19,7 +23,7 @@ class Block {
     }
 }
 
-// all my blocks
+// all my target blocks co-ordinates
 const blocks = [
     new Block(10,270),
     new Block(120,270),
@@ -38,7 +42,7 @@ const blocks = [
     new Block(450,210)
 ]
 
-// draw all my block
+// draw all my target block
 function addBlocks(){
     for(let i=0;i<blocks.length;i++){
         const block = document.createElement('div')
@@ -50,19 +54,19 @@ function addBlocks(){
 }
 addBlocks()
 
-// make user
+// make user board
 const user = document.createElement('div')
 user.classList.add('user')
 grid.appendChild(user)
 userCordinate()
 
-// user position
+// user board positioning
 function userCordinate(){
     user.style.left = currentPosition[0]+'px'
     user.style.bottom = currentPosition[1]+'px'
 }
 
-// move user
+// user board control
 function moveUser(e){
     switch (e.key){
         case 'ArrowLeft':
@@ -81,24 +85,40 @@ function moveUser(e){
 }
 document.addEventListener('keydown',moveUser)
 
-// make ball
+// make a ball
 const ball = document.createElement('div')
 ball.classList.add('ball')
 grid.appendChild(ball)
 ballCordinate()
 
-// ball position
+// ball positioning
 function ballCordinate(){
     ball.style.left = ballCurrentPosition[0]+'px'
     ball.style.bottom = ballCurrentPosition[1]+'px'
 }
 
-// move ball
+// ball trajectory
 function moveBall(){
-    ballCurrentPosition[0] += 2
-    ballCurrentPosition[1] +=2
+    checkForCollision()
+    ballCurrentPosition[0] += xDirection
+    ballCurrentPosition[1] += yDirection
+    console.log(ballCurrentPosition)
+    console.log(currentPosition)
     ballCordinate()
 }
 timerId = setInterval(moveBall, 30)
 
 // check for collision
+function checkForCollision(){
+    // check for wall collision
+    if(ballCurrentPosition[1] >= (boardHeight - ballDiameter)){
+            yDirection -= 2
+    }
+    else if(ballCurrentPosition[0] >= (boardWidth - ballDiameter)){
+        xDirection -= 2
+    }
+    // else if(ballCurrentPosition[0] <= currentPosition[0]){
+    //     yDirection += 2 
+    // }
+}
+
