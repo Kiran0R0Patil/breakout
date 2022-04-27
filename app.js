@@ -1,5 +1,5 @@
 const grid = document.querySelector('.grid')
-const displayResult = document.querySelector('#result')
+const resultDisplay = document.querySelector('#result')
 const boardWidth = 560
 const boardHeight = 300
 const blockWidth = 100 
@@ -8,6 +8,7 @@ const ballDiameter = 20
 let timerId
 let xDirection = -2
 let yDirection = 2
+let score = 0
 
 const userStart = [230,10]
 let currentPosition = userStart
@@ -110,23 +111,30 @@ timerId = setInterval(moveBall, 30)
 // check for collision
 function checkForCollision(){
     // check for block collisions
-    for(let i=0; i<blocks.length; i++){
-        if(
-            (ballCurrentPosition[0] >= blocks[i].bottomLeft[0] && ballCurrentPosition[0] <= blocks[i].bottomRight[0])
-            &&
-            ((ballCurrentPosition[1] + ballDiameter) >= blocks[i].bottomLeft[1] && ballCurrentPosition[1] <= blocks[i].topLeft[1])
-        ){
-            const breakout = Array.from(document.querySelectorAll('.blocks'))
-            breakout[i].classList.remove('block')
+    const ballxhit = ballCurrentPosition[0] + ballDiameter
+    const ballyhit = ballCurrentPosition[1] + ballDiameter
+    for(let i =0; i<blocks.length;i++){
+        if(ballxhit > blocks[i].bottomLeft[0] && ballCurrentPosition[0] < blocks[i].bottomRight[0] 
+            && 
+            ballyhit > blocks[i].bottomLeft[1] && ballCurrentPosition[1] < blocks[i].topLeft[1])
+            {
+            const allBlocks = Array.from(document.querySelectorAll('.block'))
+            allBlocks[i].classList.remove('block')
+            console.log(allBlocks[i])
             blocks.splice(i, 1)
             ballDeflect()
-
+            score++
+            resultDisplay.innerHTML = score
         }
     }
+    
     // check for wall collision
-    if(ballCurrentPosition[0] >= (boardWidth - ballDiameter) || ballCurrentPosition[1] >= (boardHeight - ballDiameter) ||ballCurrentPosition[0] <= 0){
+    if(ballCurrentPosition[0] >= (boardWidth - ballDiameter) || 
+    ballCurrentPosition[1] >= (boardHeight - ballDiameter) ||
+    ballCurrentPosition[0] <= 0){
             ballDeflect()
     }
+
     // check for game over
     if(ballCurrentPosition[1] <= 0){
         clearInterval(timerId)
@@ -153,7 +161,3 @@ function ballDeflect(){
         return
     }
 }
-
-    // left at
-    // check for block collisions
-    // check for wall collision
