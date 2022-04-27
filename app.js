@@ -78,7 +78,7 @@ function moveUser(e){
             }
             break;
         case 'ArrowRight':
-            if(currentPosition[0] < boardWidth){
+            if(currentPosition[0] + blockWidth < boardWidth){
             currentPosition[0] += 10
             userCordinate()
             }
@@ -106,10 +106,11 @@ function moveBall(){
     ballCordinate()
     checkForCollision()
 }
-timerId = setInterval(moveBall, 30)
+timerId = setInterval(moveBall, 20)
 
 // check for collision
 function checkForCollision(){
+    
     // check for block collisions
     const ballxhit = ballCurrentPosition[0] + ballDiameter
     const ballyhit = ballCurrentPosition[1] + ballDiameter
@@ -125,14 +126,28 @@ function checkForCollision(){
             ballDeflect()
             score++
             resultDisplay.innerHTML = score
+
+            // check for win
+            if(score === 15){
+                displayResult.innerHTML = 'YOU WON'
+                clearInterval(timerId)
+                document.removeEventListener('keydown', moveUser)
+    }
         }
     }
-    
     // check for wall collision
     if(ballCurrentPosition[0] >= (boardWidth - ballDiameter) || 
     ballCurrentPosition[1] >= (boardHeight - ballDiameter) ||
     ballCurrentPosition[0] <= 0){
             ballDeflect()
+    }
+
+    // check for user collision
+    if(
+        ballCurrentPosition[0] > currentPosition[0] && ballCurrentPosition[0] < (currentPosition[0] + blockWidth) &&
+         (ballCurrentPosition[1] > currentPosition[1] &&ballCurrentPosition[1] < currentPosition[1] + blockHeight)
+         ){
+        ballDeflect()
     }
 
     // check for game over
@@ -161,3 +176,6 @@ function ballDeflect(){
         return
     }
 }
+
+
+// check for win and stop 
