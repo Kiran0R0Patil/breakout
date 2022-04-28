@@ -1,5 +1,5 @@
 const grid = document.querySelector('.grid')
-const resultDisplay = document.querySelector('#result')
+const displayResult = document.querySelector('#result')
 const boardWidth = 560
 const boardHeight = 300
 const blockWidth = 100 
@@ -121,14 +121,12 @@ function checkForCollision(){
             {
             const allBlocks = Array.from(document.querySelectorAll('.block'))
             allBlocks[i].classList.remove('block')
-            console.log(allBlocks[i])
             blocks.splice(i, 1)
             ballDeflect()
             score++
-            resultDisplay.innerHTML = score
-
+            displayResult.innerHTML = score
             // check for win
-            if(score === 15){
+            if(blocks.length === 0){
                 displayResult.innerHTML = 'YOU WON'
                 clearInterval(timerId)
                 document.removeEventListener('keydown', moveUser)
@@ -145,8 +143,8 @@ function checkForCollision(){
     // check for user collision
     if(
         ballCurrentPosition[0] > currentPosition[0] && ballCurrentPosition[0] < (currentPosition[0] + blockWidth) &&
-         (ballCurrentPosition[1] > currentPosition[1] &&ballCurrentPosition[1] < currentPosition[1] + blockHeight)
-         ){
+        (ballCurrentPosition[1] > currentPosition[1] &&ballCurrentPosition[1] < currentPosition[1] + blockHeight)
+        ){
         ballDeflect()
     }
 
@@ -177,5 +175,4 @@ function ballDeflect(){
     }
 }
 
-
-// check for win and stop 
+// add start restart button 
