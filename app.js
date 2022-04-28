@@ -175,4 +175,4 @@ function ballDeflect(){
     }
 }
 
-// add start restart button 
+// next add start - restart button for the game
